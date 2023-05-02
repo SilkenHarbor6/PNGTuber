@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using NAudio.CoreAudioApi;
+using PNGTuber.Model;
 using PNGTuber.Services;
 
 namespace PNGTuber
@@ -24,10 +25,10 @@ namespace PNGTuber
 
         private void CheckForSettings()
         {
-            if (Singleton.Instance.settings != null)
+            if (LocalStorageManager.CheckIntegrity(Singleton.Instance.settings))
             {
-                this.trackBar1.Value = Singleton.Instance.settings.Volume;
-                this.trackBar2.Value = Singleton.Instance.settings.Amplifier;
+                this.trackBar1.Value = Math.Clamp(Singleton.Instance.settings.Volume, 1, 10);
+                this.trackBar2.Value = Math.Clamp(Singleton.Instance.settings.Amplifier, 1, 10);
                 this.idlePictureBox.Image = Image.FromFile(Singleton.Instance.settings.IdleImagePath);
                 this.TalkingPictureBox.Image = Image.FromFile(Singleton.Instance.settings.TalkingImagePath);
             }
@@ -35,6 +36,7 @@ namespace PNGTuber
             {
                 Singleton.Instance.settings.Volume = 2;
                 Singleton.Instance.settings.Amplifier = 10;
+                Singleton.Instance.settings.isApng = false;
             }
         }
 
@@ -105,6 +107,11 @@ namespace PNGTuber
             LocalStorageManager.SaveConfig();
             Form1 frm = new Form1();
             frm.Show();
+        }
+
+        private void checkBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            Singleton.Instance.settings.isApng=checkBox1.Checked;
         }
     }
 }
