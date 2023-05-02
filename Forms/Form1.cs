@@ -13,30 +13,15 @@ namespace PNGTuber
         private int VolumeLevel = 2;
         private int Amplifier = 10;
         bool isTalking = false;
-        private ContextMenuStrip contextMenuStrip1;
-        private ToolStripMenuItem configuracionToolStripMenuItem;
-        private ToolStripMenuItem ayudaToolStripMenuItem;
-        private ToolStripMenuItem ocultarBordeToolStripMenuItem;
+        bool isBorderHidden = false;
         public Form1()
         {
             InitializeComponent();
             LoadData();
             PrepareAudio();
-            PrepareNotifyIcon();
             GC.Collect();
+            notifyIcon1.Icon = SystemIcons.Application;
         }
-
-        private void PrepareNotifyIcon()
-        {
-            this.notifyIcon1.ContextMenuStrip = this.contextMenuStrip1;
-            this.notifyIcon1.Text = "PNGTube Project";
-            this.notifyIcon1.Visible = true;
-            configuracionToolStripMenuItem = new ToolStripMenuItem
-            {
-                Text = "Configuration",
-            };
-        }
-
         void LoadData()
         {
             frames = ApngController.getFrames(Singleton.Instance.settings.TalkingImagePath);
@@ -44,8 +29,7 @@ namespace PNGTuber
             VolumeLevel = Singleton.Instance.settings.Volume;
             Amplifier = Singleton.Instance.settings.Amplifier;
             pictureBox1.Image = idleFrames[currentFrame];
-            this.notifyIcon1.Icon = SystemIcons.Application;
-            this.notifyIcon1.Visible = true;
+
         }
         void PrepareAudio()
         {
@@ -103,6 +87,25 @@ namespace PNGTuber
                 currentFrame = 0;
             }
             //this.pictureBox1.Image = this._IdleImage;
+        }
+
+        private void toggleBorderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isBorderHidden)
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                isBorderHidden = false;
+            }
+            else
+            {
+                this.FormBorderStyle = FormBorderStyle.None;
+                isBorderHidden = true;
+            }
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

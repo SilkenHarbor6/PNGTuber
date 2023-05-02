@@ -33,7 +33,12 @@
             timer1 = new System.Windows.Forms.Timer(components);
             panel1 = new Panel();
             notifyIcon1 = new NotifyIcon(components);
+            contextMenuStrip1 = new ContextMenuStrip(components);
+            settingsToolStripMenuItem = new ToolStripMenuItem();
+            toggleBorderToolStripMenuItem = new ToolStripMenuItem();
+            exitToolStripMenuItem = new ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            contextMenuStrip1.SuspendLayout();
             SuspendLayout();
             // 
             // pictureBox1
@@ -61,8 +66,36 @@
             // 
             // notifyIcon1
             // 
-            notifyIcon1.Text = "PNGTube Project";
+            notifyIcon1.ContextMenuStrip = contextMenuStrip1;
+            notifyIcon1.Text = "PNGTuber";
             notifyIcon1.Visible = true;
+            // 
+            // contextMenuStrip1
+            // 
+            contextMenuStrip1.ImageScalingSize = new Size(20, 20);
+            contextMenuStrip1.Items.AddRange(new ToolStripItem[] { settingsToolStripMenuItem, toggleBorderToolStripMenuItem, exitToolStripMenuItem });
+            contextMenuStrip1.Name = "contextMenuStrip1";
+            contextMenuStrip1.Size = new Size(211, 104);
+            // 
+            // settingsToolStripMenuItem
+            // 
+            settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
+            settingsToolStripMenuItem.Size = new Size(210, 24);
+            settingsToolStripMenuItem.Text = "Settings";
+            // 
+            // toggleBorderToolStripMenuItem
+            // 
+            toggleBorderToolStripMenuItem.Name = "toggleBorderToolStripMenuItem";
+            toggleBorderToolStripMenuItem.Size = new Size(210, 24);
+            toggleBorderToolStripMenuItem.Text = "Toggle Border";
+            toggleBorderToolStripMenuItem.Click += toggleBorderToolStripMenuItem_Click;
+            // 
+            // exitToolStripMenuItem
+            // 
+            exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            exitToolStripMenuItem.Size = new Size(210, 24);
+            exitToolStripMenuItem.Text = "Exit";
+            exitToolStripMenuItem.Click += exitToolStripMenuItem_Click;
             // 
             // Form1
             // 
@@ -76,6 +109,7 @@
             Text = "Form1";
             TransparencyKey = Color.LimeGreen;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            contextMenuStrip1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -85,5 +119,9 @@
         private System.Windows.Forms.Timer timer1;
         private Panel panel1;
         private NotifyIcon notifyIcon1;
+        private ContextMenuStrip contextMenuStrip1;
+        private ToolStripMenuItem settingsToolStripMenuItem;
+        private ToolStripMenuItem toggleBorderToolStripMenuItem;
+        private ToolStripMenuItem exitToolStripMenuItem;
     }
 }
