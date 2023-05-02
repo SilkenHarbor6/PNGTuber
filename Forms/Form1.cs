@@ -14,22 +14,35 @@ namespace PNGTuber
         private int Amplifier = 10;
         bool isTalking = false;
         bool isBorderHidden = false;
+        Image idleImage;
+        Image talkingImage;
         public Form1()
         {
             InitializeComponent();
-            LoadData();
+            if (Singleton.Instance.settings.isApng)
+            {
+                LoadApngData();
+            }
+            else
+            {
+                LoadPngData();
+            }
             PrepareAudio();
             GC.Collect();
             notifyIcon1.Icon = SystemIcons.Application;
         }
-        void LoadData()
+        void LoadPngData()
         {
+            idleImage = Image.FromFile(Singleton.Instance.settings.IdleImagePath);
+            talkingImage = Image.FromFile(Singleton.Instance.settings.TalkingImagePath);
+            pictureBox1.Image = idleImage;
+        }
+        void LoadApngData()
+        {
+            this.timer1.Enabled = true;
             frames = ApngController.getFrames(Singleton.Instance.settings.TalkingImagePath);
             idleFrames = ApngController.getFrames(Singleton.Instance.settings.IdleImagePath);
-            VolumeLevel = Singleton.Instance.settings.Volume;
-            Amplifier = Singleton.Instance.settings.Amplifier;
             pictureBox1.Image = idleFrames[currentFrame];
-
         }
         void PrepareAudio()
         {
@@ -38,9 +51,13 @@ namespace PNGTuber
             this.oEscucha.LoadGrammar(new DictationGrammar());
             this.oEscucha.AudioLevelUpdated += this.StartTalking;
             this.oEscucha.RecognizeAsync(RecognizeMode.Multiple);
+            VolumeLevel = Singleton.Instance.settings.Volume;
+            Amplifier = Singleton.Instance.settings.Amplifier;
         }
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (!this.timer1.Enabled)
+                return;
             if (isTalking)
             {
                 //Play talking animation
@@ -72,21 +89,37 @@ namespace PNGTuber
         {
             if (((sender as SpeechRecognitionEngine).AudioLevel * Amplifier) > this.VolumeLevel)
             {
-                //Apply talking image
-                if (!isTalking)
+                if (Singleton.Instance.settings.isApng)
                 {
-                    isTalking = true;
-                    currentFrame = 0;
+                    //Apply talking image
+                    if (!isTalking)
+                    {
+                        isTalking = true;
+                        currentFrame = 0;
+                    }
+                    return;
                 }
-                return;
+                else
+                {
+                    this.pictureBox1.Image = talkingImage;
+                    return;
+                }
             }
-            //Show Idle image
-            if (isTalking)
+            else
             {
-                isTalking = false;
-                currentFrame = 0;
+                if (Singleton.Instance.settings.isApng)
+                {
+                    if (isTalking)
+                    {
+                        isTalking = false;
+                        currentFrame = 0;
+                    }
+                }
+                else
+                {
+                    this.pictureBox1.Image = idleImage;
+                }
             }
-            //this.pictureBox1.Image = this._IdleImage;
         }
 
         private void toggleBorderToolStripMenuItem_Click(object sender, EventArgs e)
@@ -106,6 +139,11 @@ namespace PNGTuber
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Application.Exit();
+        }
+
+        private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
