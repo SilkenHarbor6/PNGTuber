@@ -22,7 +22,8 @@ namespace PNGTuber
             //LoadMultiMediaDevices();
             CheckForSettings();
         }
-
+        public delegate void ConfigurationCallback();
+        public ConfigurationCallback onConfigurationCallback;
         private void CheckForSettings()
         {
             if (LocalStorageManager.CheckIntegrity(Singleton.Instance.settings))
@@ -31,6 +32,7 @@ namespace PNGTuber
                 this.trackBar2.Value = Math.Clamp(Singleton.Instance.settings.Amplifier, 1, 10);
                 this.idlePictureBox.Image = Image.FromFile(Singleton.Instance.settings.IdleImagePath);
                 this.TalkingPictureBox.Image = Image.FromFile(Singleton.Instance.settings.TalkingImagePath);
+                this.checkBox1.Checked = Singleton.Instance.settings.isApng;
             }
             else
             {
@@ -105,13 +107,21 @@ namespace PNGTuber
                 return;
             }
             LocalStorageManager.SaveConfig();
-            Form1 frm = new Form1();
-            frm.Show();
+            if (onConfigurationCallback != null)
+            {
+                onConfigurationCallback.Invoke();
+                this.Dispose();
+            }
+            else
+            {
+                Form1 frm = new Form1();
+                frm.Show();
+            }
         }
 
         private void checkBox1_CheckedChanged(object sender, EventArgs e)
         {
-            Singleton.Instance.settings.isApng=checkBox1.Checked;
+            Singleton.Instance.settings.isApng = checkBox1.Checked;
         }
     }
 }
