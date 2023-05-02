@@ -19,6 +19,13 @@ namespace PNGTuber
         public Form1()
         {
             InitializeComponent();
+            PrepareData();
+            PrepareAudio();
+            GC.Collect();
+            notifyIcon1.Icon = SystemIcons.Application;
+        }
+        void PrepareData()
+        {
             if (Singleton.Instance.settings.isApng)
             {
                 LoadApngData();
@@ -27,9 +34,6 @@ namespace PNGTuber
             {
                 LoadPngData();
             }
-            PrepareAudio();
-            GC.Collect();
-            notifyIcon1.Icon = SystemIcons.Application;
         }
         void LoadPngData()
         {
@@ -143,7 +147,18 @@ namespace PNGTuber
 
         private void settingsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            Configuration frmConfiguration = new Configuration();
+            frmConfiguration.Show();
+            frmConfiguration.onConfigurationCallback += ConfigurationCallback;
+            this.Hide();
+        }
+        void ConfigurationCallback()
+        {
+            this.Show();
+            frames = null;
+            idleFrames = null;
+            isTalking = false;
+            PrepareData();
         }
     }
 }
