@@ -121,6 +121,7 @@
             idlePictureBox.Location = new Point(12, 12);
             idlePictureBox.Name = "idlePictureBox";
             idlePictureBox.Size = new Size(223, 282);
+            idlePictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             idlePictureBox.TabIndex = 8;
             idlePictureBox.TabStop = false;
             // 
@@ -129,6 +130,7 @@
             TalkingPictureBox.Location = new Point(259, 12);
             TalkingPictureBox.Name = "TalkingPictureBox";
             TalkingPictureBox.Size = new Size(223, 282);
+            TalkingPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             TalkingPictureBox.TabIndex = 9;
             TalkingPictureBox.TabStop = false;
             // 
@@ -141,6 +143,7 @@
             checkBox1.TabIndex = 10;
             checkBox1.Text = "is Animated PNG?";
             checkBox1.UseVisualStyleBackColor = true;
+            checkBox1.CheckedChanged += checkBox1_CheckedChanged;
             // 
             // Configuration
             // 
