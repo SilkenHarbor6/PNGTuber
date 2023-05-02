@@ -35,7 +35,7 @@ namespace PNGTuber.Services
             }
             return false;
         }
-        private static bool CheckIntegrity(ConfigurationModel settings)
+        public static bool CheckIntegrity(ConfigurationModel settings)
         {
             if (settings.Volume == 0)
                 return false;
